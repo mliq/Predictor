@@ -6,6 +6,7 @@ shinyServer(function(input, output) {
     library(tm)
     library(RWeka)
     library(data.table)
+    library(SnowballC)
     Tfreq=readRDS("t.Tfreq6.RDS")
   
   ## FUNCTION DEFINITIONS ##
@@ -83,7 +84,7 @@ shinyServer(function(input, output) {
     #### INPUT MUNGING ####
       getPred=function(x){
         # Take an input:
-        test=scan("Quiz3.txt", what="character",n=1,skip=x)
+        test=x
 
         # transform as training set was (lowercase, stem, strip punctuation etc.)
         test=iconv(test, to='ASCII', sub=' ')
@@ -103,9 +104,10 @@ shinyServer(function(input, output) {
         # Make prediction list of matches:
         Tpred=data.table(Tfreq[grep(paste0("^",history," "),Tfreq$grams),][order(-counts)])
 
-        # Print out top 5 possibilities:
-        print(Tpred[1:25])
-        Tpred<<-Tpred
+        # Isolate top prediction:
+        pred=Tpred[1]$grams
+        pred=unlist(strsplit(pred,"\\s+"))
+        pred=pred[length(pred)]
       }
   #####################################################
   
@@ -115,6 +117,7 @@ shinyServer(function(input, output) {
     x
   }
   output$prediction <- renderText({  
-    tester(input$text) #getPred
+    #tester(input$text) 
+    as.character(getPred(input$text))
   })
 })
