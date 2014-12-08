@@ -11,7 +11,7 @@ shinyUI(fluidPage( #"Predictor",
   fluidRow(
     column(3,
      # INPUT
-     textInput("text",label=h4("Enter Your Text Below:"),value="Enter text...")
+     textInput("text",label=h4("Enter Your Text Below:"))
     )
   ),
   fluidRow(
