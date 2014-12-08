@@ -1,4 +1,6 @@
 library(shiny)
+options(shiny.trace = F)  # cahnge to T for trace
+library(shinysky)
 
 shinyServer(function(input, output) {
 #####################################################
@@ -113,11 +115,7 @@ shinyServer(function(input, output) {
   
   # OUTPUT PREDICTION #
   
-  tester=function(x){
-    x
-  }
   output$prediction <- renderText({  
-    #tester(input$text) 
     as.character(getPred(input$text))
   })
 })

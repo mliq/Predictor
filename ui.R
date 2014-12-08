@@ -1,13 +1,17 @@
 library(shiny)
+options(shiny.trace = F)  # cahnge to T for trace
+library(shinysky)
 
 shinyUI(fluidPage( #"Predictor",
   
+  # Supress Error messages
+  tags$style(type="text/css",
+  ".shiny-output-error { visibility: hidden; }",
+  ".shiny-output-error:before { visibility: hidden; }"
+  ),
   # Application title
   titlePanel("Predictor!"),
-
-  # title="Predictor", 
-  #img(src="600x100.jpg"),
-  hr(),
+  busyIndicator("Prediction In progress",wait = 0),
   fluidRow(
     column(3,
      # INPUT
