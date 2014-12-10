@@ -10,17 +10,12 @@ shinyUI(fluidPage( #"Predictor",
   ".shiny-output-error:before { visibility: hidden; }"
   ),
   # Application title
-  titlePanel("Predictor!"),
+  h1("Predictor!"),
+  h5("Please allow 10-20 seconds for the initial loading of the prediction engine"),
+  hr(),
   busyIndicator("Prediction In progress",wait = 0),
-  fluidRow(
-    column(3,
-     # INPUT
-     textInput("text",label=h4("Enter Your Text Below:"))
-    )
-  ),
-  fluidRow(
-    column(3,textOutput("prediction")
-    )
-  )
+   # INPUT
+  textInput("text",label=h4("Enter Your Text Below:")),
+  textOutput("prediction")  
 )                          
 )
