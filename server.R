@@ -13,10 +13,10 @@ shinyServer(function(input, output) {
 	library(SnowballC)
 	
 	# Trigrams
-	tfreq=readRDS("t.no1counts.RDS")
-	bfreq=readRDS("b.no1counts.RDS")
-	nfreq=readRDS("n.no1counts.RDS")
-	afreq=readRDS("ALL.no1counts.RDS")
+	tfreq=readRDS("t.no2counts.RDS")
+	bfreq=readRDS("b.no2counts.RDS")
+	nfreq=readRDS("n.no2counts.RDS")
+	afreq=readRDS("ALL.no2counts.RDS")
   
   ## FUNCTION DEFINITIONS ##
 
@@ -136,17 +136,19 @@ shinyServer(function(input, output) {
 		  t.acc=classify(tfreq,words)
 		  n.acc=classify(nfreq,words)
 		  a.acc=classify(afreq,words)
-		}  
 
-		# Select frequency table based on classification results.
-		if(b.acc>t.acc && b.acc>n.acc && b.acc>a.acc){
-			Tfreq=bfreq
-		} else if(t.acc>b.acc && t.acc>n.acc && t.acc>a.acc){
-			Tfreq=tfreq
-		} else if(n.acc>b.acc && n.acc>t.acc && n.acc>a.acc){
-			Tfreq=nfreq
-		} else if(a.acc>b.acc && a.acc>t.acc && a.acc>n.acc){
-			Tfreq=afreq
+			# Select frequency table based on classification results.
+			if(b.acc>t.acc && b.acc>n.acc && b.acc>a.acc){
+				Tfreq=bfreq
+			} else if(t.acc>b.acc && t.acc>n.acc && t.acc>a.acc){
+				Tfreq=tfreq
+			} else if(n.acc>b.acc && n.acc>t.acc && n.acc>a.acc){
+				Tfreq=nfreq
+			} else if(a.acc>b.acc && a.acc>t.acc && a.acc>n.acc){
+				Tfreq=afreq
+			} else {
+				Tfreq=afreq
+			}
 		} else {
 			Tfreq=afreq
 		}
