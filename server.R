@@ -13,9 +13,9 @@ shinyServer(function(input, output) {
 	library(SnowballC)
 	
 	# Trigrams
-	tfreq=readRDS("t.all3.Tfreq.RDS")
-	bfreq=readRDS("b.all3.Tfreq.RDS")
-	nfreq=readRDS("n.all3.Tfreq.RDS")
+	tfreq=readRDS("t.no1counts.RDS")
+	bfreq=readRDS("b.no1counts.RDS")
+	nfreq=readRDS("n.no1counts.RDS")
 	afreq=readRDS("ALL.no1counts.RDS")
   
   ## FUNCTION DEFINITIONS ##
@@ -90,13 +90,13 @@ shinyServer(function(input, output) {
 		x=x[which(nchar(x)!=0)]
 	  }
 
-	classify=function(y,words.=words){
-	  total=length(words.)-2
+	classify=function(y,z){
+	  total=length(z)-2
 	  correct=0
 	  lapply(1:total,FUN=function(x){
 			# loop through sentence making bigram and answer, 
-			bigram=paste(words.[x], words.[x+1])
-			answer=paste(words.[x+2])
+			bigram=paste(z[x], z[x+1])
+			answer=paste(z[x+2])
 			# then check answer against predicted answer.
 			# Get answer
 			Xpred=data.table(y[grep(paste0("^",bigram," "),y$grams),][order(-counts)])	
@@ -132,23 +132,23 @@ shinyServer(function(input, output) {
 		# Classify text (if 3 words or more)
 		
 		if(length(words)>=3){
-		  b.acc=classify(bfreq)
-		  t.acc=classify(tfreq)
-		  n.acc=classify(nfreq)
+		  b.acc=classify(bfreq,words)
+		  t.acc=classify(tfreq,words)
+		  n.acc=classify(nfreq,words)
 		  a.acc=classify(afreq,words)
 		}  
 
 		# Select frequency table based on classification results.
 		if(b.acc>t.acc && b.acc>n.acc && b.acc>a.acc){
-			acc=b.acc
+			Tfreq=bfreq
 		} else if(t.acc>b.acc && t.acc>n.acc && t.acc>a.acc){
-			acc=t.acc
+			Tfreq=tfreq
 		} else if(n.acc>b.acc && n.acc>t.acc && n.acc>a.acc){
-			acc=n.acc
+			Tfreq=nfreq
 		} else if(a.acc>b.acc && a.acc>t.acc && a.acc>n.acc){
-			acc=a.acc
+			Tfreq=afreq
 		} else {
-			acc=a.acc
+			Tfreq=afreq
 		}
 
 		# Isolate last two words of the sentence
