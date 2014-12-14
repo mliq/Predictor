@@ -3,6 +3,7 @@
 library(shiny)
 options(shiny.trace = F)  # cahnge to T for trace
 library(shinysky)
+library(stringr)
 
 shinyServer(function(input, output) {
   #####################################################
@@ -130,13 +131,14 @@ shinyServer(function(input, output) {
     words<-unlist(strsplit(corpus,"\\s+"))
     
     # Classify text (if 3 words or more)
-    
+    Tfreq=afreq
+
     if(length(words)>=3){
       b.acc=classify(bfreq,words)
       t.acc=classify(tfreq,words)
       n.acc=classify(nfreq,words)
       a.acc=classify(afreq,words)
-      
+    
       # Select frequency table based on classification results.
       if(b.acc>t.acc && b.acc>n.acc && b.acc>a.acc){
         Tfreq=bfreq
@@ -144,22 +146,18 @@ shinyServer(function(input, output) {
         Tfreq=tfreq
       } else if(n.acc>b.acc && n.acc>t.acc && n.acc>a.acc){
         Tfreq=nfreq
-      } else if(a.acc>b.acc && a.acc>t.acc && a.acc>n.acc){
-        Tfreq=afreq
       } else {
         Tfreq=afreq
       }
-    } else {
-      Tfreq=afreq
     }
-    
     # Isolate last two words of the sentence
     history=words[(length(words)-1):length(words)]
     nMin1=words[length(words)]
     history=paste(as.character(history),collapse=' ')
-    
+    histstring=str_replace_all(history, "[[:punct:]]", "?")
+
     # Make prediction list of matches:
-    Tpred=data.table(Tfreq[grep(paste0("^",history," "),Tfreq$grams),][order(-counts)])
+    Tpred=data.table(Tfreq[grep(paste0("^",histstring," "),Tfreq$grams),][order(-counts)])
     
     # Isolate top prediction:
     pred=Tpred[1]$grams
