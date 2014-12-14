@@ -13,10 +13,10 @@ shinyServer(function(input, output) {
 	library(SnowballC)
 	
 	# Trigrams
-	tfreq=readRDS("t.no2counts.RDS")
-	bfreq=readRDS("b.no2counts.RDS")
-	nfreq=readRDS("n.no2counts.RDS")
-	afreq=readRDS("ALL.no2counts.RDS")
+	tfreq=readRDS("t.no4counts.RDS")
+	bfreq=readRDS("b.no4counts.RDS")
+	nfreq=readRDS("n.no4counts.RDS")
+	afreq=readRDS("ALL.no4counts.RDS")
   
   ## FUNCTION DEFINITIONS ##
 
@@ -165,6 +165,10 @@ shinyServer(function(input, output) {
 		pred=Tpred[1]$grams
 		pred=unlist(strsplit(pred,"\\s+"))
 		pred=pred[length(pred)]
+		if(is.na(pred)){
+			pred="the"
+		}
+		return(pred)
 	  }
   #####################################################
   
