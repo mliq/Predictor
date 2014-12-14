@@ -11,7 +11,7 @@ shinyUI(fluidPage( #"Predictor",
   ),
   # Application title
   h1("Predictor!"),
-  h5("Please allow 10-20 seconds for the initial loading of the prediction engine"),
+  #h5("Please allow 10-20 seconds for the initial loading of the prediction engine"),
   hr(),
   busyIndicator("Prediction In progress",wait = 0),
    # INPUT
