@@ -15,7 +15,8 @@ shinyUI(fluidPage( #"Predictor",
   hr(),
   busyIndicator("Prediction In progress",wait = 0),
    # INPUT
-  textInput("text",label=h4("Enter Your Text Below:")),
+  tags$textarea(id="text", rows=2, cols=260, ""),
+  #textInput("text",label=h4("Enter Your Text Below:")),
   textOutput("prediction")  
 )                          
 )
