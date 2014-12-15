@@ -55,28 +55,6 @@ shinyServer(function(input, output) {
     x=x[which(nchar(x)!=0)]
   }
   
-  classify=function(y,z,t){
-    correct=0
-    lapply(1:t,FUN=function(x){
-      # loop through sentence making bigram and answer, 
-      bigram=paste(z[x], z[x+1])
-      answer=paste(z[x+2])
-      # then check answer against predicted answer.
-      # Get answer
-      Xpred=data.table(y[grep(paste0("^",bigram," "),y$grams),][order(-counts)])  
-      # isolate the answer from prediction table.
-      Xpred=unlist(strsplit(Xpred[1]$grams,"\\s+"))
-      Xpred=Xpred[length(Xpred)]
-      # Test equality of prediction to actual and counter for the accuracy measure
-      if(!is.na(Xpred)){
-        if(Xpred==answer){correct=correct+1}  
-        correct<<-correct
-      }
-    })
-    accuracy = correct/length(z)
-    return(accuracy)
-  }
-  
   getPred=function(x){
     # Take an input:
     test=x
@@ -89,25 +67,6 @@ shinyServer(function(input, output) {
     # Split by words:
     words<-unlist(strsplit(corpus,"\\s+"))
     Tfreq=afreq
-    # Classify text (if 3 words or more)
-    if(length(words)>=3){
-      total=length(words)-2
-      if(total>5){total=5}
-      b.acc=classify(bfreq,words,total)
-      t.acc=classify(tfreq,words,total)
-      n.acc=classify(nfreq,words,total)
-      a.acc=classify(afreq,words,total)
-      # Select frequency table based on classification results.
-      if(b.acc>t.acc && b.acc>n.acc && b.acc>a.acc){
-        Tfreq=bfreq
-      } else if(t.acc>b.acc && t.acc>n.acc && t.acc>a.acc){
-        Tfreq=tfreq
-      } else if(n.acc>b.acc && n.acc>t.acc && n.acc>a.acc){
-        Tfreq=nfreq
-      } else {
-        Tfreq=afreq
-      }
-    }
     # Isolate last two words of the sentence
     history=words[(length(words)-1):length(words)]
     nMin1=words[length(words)]
@@ -126,9 +85,6 @@ shinyServer(function(input, output) {
   }
   
   # Trigrams
-  tfreq=readRDS("t.no4counts.RDS")
-  bfreq=readRDS("b.no4counts.RDS")
-  nfreq=readRDS("n.no4counts.RDS")
   afreq=readRDS("ALL.no4counts.RDS")
   
   library(compiler)

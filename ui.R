@@ -18,6 +18,6 @@ shinyUI(fluidPage( #"Predictor",
   HTML('<textarea id="text" rows="3" cols="440"></textarea>'),
   #tags$textarea(id="text", rows=2, cols=260, ""),
   #textInput("text",label=h4("Enter Your Text Below:")),
-  textOutput("prediction")  
+  textOutput("prediction")
 )                          
 )
